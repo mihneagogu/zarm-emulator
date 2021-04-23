@@ -19,4 +19,7 @@ pub fn main() anyerror!void {
     
     var cpu = CpuState.init(alloc);
     defer cpu.destroy(alloc);
-}
+
+    cpu.incrementPC();
+    cpu.printRegisters();
+
