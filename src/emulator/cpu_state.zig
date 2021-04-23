@@ -38,7 +38,7 @@ pub const CpuState = struct {
 
     pub fn get_flag(self: *CpuState, flag: CpuFlag) bool {
         const mask: u32 = @as(u32, 1) << (31 - @intCast(u5, @enumToInt(flag)));
-        return (self.registers[CPSR] & mask) != 1;
+        return (self.registers[CPSR] & mask) != 0;
     }
 
 };
