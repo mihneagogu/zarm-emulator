@@ -1,7 +1,7 @@
 const std = @import("std");
 const Allocator = std.mem.Allocator; 
 
-const MEMORY_SIZE = 65536;
+pub const MEMORY_SIZE = 65536;
 const REGISTERS = 17;
 const PC = 15;
 const CPSR = 16;
@@ -48,7 +48,7 @@ pub const CpuState = struct {
         alloc.free(self.memory);
     }
 
-    pub fn setFlag(self: *CpuState, flag: CpuFlag, set: bool) void {
+    pub fn setCPSRFlag(self: *CpuState, flag: CpuFlag, set: bool) void {
         const mask: u32 = @as(u32, 1) << (31 - @intCast(u5, @enumToInt(flag)));
         if (set) {
             self.registers[CPSR] = self.registers[CPSR] | mask;
@@ -67,7 +67,7 @@ pub const CpuState = struct {
         pc.* += ofs;
     }
 
-    fn getPC(self: *CpuState) callconv(.Inline) *u32 {
+    pub fn getPC(self: *CpuState) callconv(.Inline) *u32 {
         return &self.registers[PC];
     }
 
@@ -104,7 +104,7 @@ pub const CpuState = struct {
             if (val == 0x80000000) {
                 std.debug.print(" ", .{}); // Weird print format condition
             }
-            std.debug.print("{d} (0x{d:0>8})\n", .{val, val});
+            std.debug.print("{d} (0x{x:0>8})\n", .{val, val});
         }
     }
 
@@ -127,6 +127,11 @@ pub const CpuState = struct {
         } else true;
     }
 };
+
+pub fn processMask(n: u32, start: u8, end: u8) u32 {
+    const mask = ( @as(u32, 1) << @intCast(u5, end - start + 1) ) - 1;
+    return (n >> @intCast(u5, start)) & mask;
+}
 
 pub fn bitmask(n: u32, pos: u8) u32 {
     return (n >> @intCast(u5, pos)) & 1;
