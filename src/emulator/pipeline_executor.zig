@@ -3,6 +3,7 @@ const _cpu = @import("cpu_state.zig");
 const _instr_exec = @import("instruction_executions.zig");
 const executeBranchInstr = _instr_exec.executeBranchInstr;
 const executeMultipltyInstruction = _instr_exec.executeMultipltyInstruction;
+const executeDataProcInstruction = _instr_exec.executeDataProcInstruction;
 const CpuState = _cpu.CpuState;
 const processMask = _cpu.processMask;
 const bitmask = _cpu.bitmask;
@@ -105,9 +106,9 @@ pub fn execute(instr: Instruction, cpu: *CpuState, pipe: *Pipe) bool {
     }
 
     switch (instr.ty) {
-        .DATA_PROCESS => {},
+        .DATA_PROCESS => { executeDataProcInstruction(cpu, &instr); pipe.executing = null; },
         .MULTIPLY => { executeMultipltyInstruction(&instr, cpu); pipe.executing = null; },
-        .SINGLE_DATA_TRANSFER => {},
+        .SINGLE_DATA_TRANSFER => { },
         .BRANCH => { return executeBranchInstr(&instr, cpu, pipe); }, 
     }
     return true;

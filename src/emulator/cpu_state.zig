@@ -76,8 +76,6 @@ pub const CpuState = struct {
         var i = 0;
         while (i < bytes): (i += 4) {
             // TODO
-            // const val = fetch(i, cpustate) 
-            // if (val != 0) print it 
         }
     }
 

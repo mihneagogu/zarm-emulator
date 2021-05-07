@@ -34,6 +34,6 @@ pub fn main() anyerror!void {
     defer cpu.destroy(alloc);
 
     _ = f.read(cpu.memory) catch @panic("Could not read file");
-    // startPipeline(&cpu);
+    startPipeline(&cpu);
 }
 
